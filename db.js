@@ -3,10 +3,11 @@ const path = require('path');
 
 const db_name = path.join(__dirname, 'constancias.db');
 const db = new sqlite3.Database(db_name, (err) => {
-  if (err) console.log('Error al conectar a la base de datos:', err);
-  else console.log('Conectado a la base de datos SQLite');
+  if (err) console.log('❌ Error al conectar a SQLite:', err);
+  else console.log('✅ Conectado a SQLite');
 });
 
+// Crear tablas si no existen
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS constancias (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +34,7 @@ db.serialize(() => {
     nombre TEXT
   )`);
 
+  // Datos iniciales
   db.run(`INSERT OR IGNORE INTO especialidad (id, nombre) VALUES (1, 'Informática')`);
   db.run(`INSERT OR IGNORE INTO tipo_documento (id, nombre) VALUES (1, 'Constancia de estudio')`);
   db.run(`INSERT OR IGNORE INTO estatus (id, nombre) VALUES (1, 'Pendiente')`);
