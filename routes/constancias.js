@@ -1,45 +1,47 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../db');
+const db = require("../db");
 
 // Obtener todas las constancias
-router.get('/', (req, res) => {
-  const sql = 'SELECT * FROM constancias';
-  db.all(sql, [], (err, rows) => {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json(rows);
+router.get("/", (req, res) => {
+  db.all("SELECT * FROM constancias", [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
   });
 });
 
-// Insertar constancia
-router.post('/', (req, res) => {
+// Crear una constancia
+router.post("/", (req, res) => {
   const { cedula, apellidos, nombres, especialidad, tipoDocumento, estatus } = req.body;
-  const sql = `INSERT INTO constancias (cedula, apellidos, nombres, especialidad, tipoDocumento, estatus)
-               VALUES (?, ?, ?, ?, ?, ?)`;
-  db.run(sql, [cedula, apellidos, nombres, especialidad, tipoDocumento, estatus], function(err) {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json({ id: this.lastID, ...req.body });
+  const query = `INSERT INTO constancias (cedula, apellidos, nombres, especialidad, tipoDocumento, estatus)
+                 VALUES (?, ?, ?, ?, ?, ?)`;
+  db.run(query, [cedula, apellidos, nombres, especialidad, tipoDocumento, estatus], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ id: this.lastID, cedula, apellidos, nombres, especialidad, tipoDocumento, estatus });
   });
 });
 
-// Actualizar constancia
-router.put('/:id', (req, res) => {
+// Actualizar una constancia
+router.put("/:id", (req, res) => {
   const { id } = req.params;
   const { cedula, apellidos, nombres, especialidad, tipoDocumento, estatus } = req.body;
-  const sql = `UPDATE constancias SET cedula=?, apellidos=?, nombres=?, especialidad=?, tipoDocumento=?, estatus=? WHERE id=?`;
-  db.run(sql, [cedula, apellidos, nombres, especialidad, tipoDocumento, estatus, id], function(err) {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json({ id, ...req.body });
+  const query = `UPDATE constancias 
+                 SET cedula=?, apellidos=?, nombres=?, especialidad=?, tipoDocumento=?, estatus=? 
+                 WHERE id=?`;
+  db.run(query, [cedula, apellidos, nombres, especialidad, tipoDocumento, estatus, id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: "Constancia no encontrada" });
+    res.json({ id, cedula, apellidos, nombres, especialidad, tipoDocumento, estatus });
   });
 });
 
-// Eliminar constancia
-router.delete('/:id', (req, res) => {
+// Eliminar una constancia
+router.delete("/:id", (req, res) => {
   const { id } = req.params;
-  const sql = 'DELETE FROM constancias WHERE id=?';
-  db.run(sql, [id], function(err) {
-    if (err) res.status(500).json({ error: err.message });
-    else res.json({ message: 'Constancia eliminada' });
+  db.run("DELETE FROM constancias WHERE id = ?", [id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: "Constancia no encontrada" });
+    res.json({ message: "Constancia eliminada correctamente" });
   });
 });
 
