@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Rutas
+// Rutas principales (OJO: aquí solo va la ruta base, no la URL completa)
 app.use("/api/constancias", constanciasRoutes);
 
 // Ruta raíz de prueba
