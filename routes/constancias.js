@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db');
+const db = require('../db'); // Asegúrate que db.js está en la raíz del proyecto
 
-// GET todas las constancias
+// ========================
+// 🔹 GET todas las constancias
+// ========================
 router.get('/api/constancias', (req, res) => {
   db.all('SELECT * FROM constancias', [], (err, rows) => {
     if (err) {
@@ -13,7 +15,9 @@ router.get('/api/constancias', (req, res) => {
   });
 });
 
-// GET constancia por ID
+// ========================
+// 🔹 GET constancia por ID
+// ========================
 router.get('/api/constancias/:id', (req, res) => {
   const { id } = req.params;
   db.get('SELECT * FROM constancias WHERE id = ?', [id], (err, row) => {
@@ -26,7 +30,9 @@ router.get('/api/constancias/:id', (req, res) => {
   });
 });
 
-// POST insertar nueva constancia
+// ========================
+// 🔹 POST insertar nueva constancia
+// ========================
 router.post('/api/constancias', (req, res) => {
   const { cedula, apellidos, nombres, especialidad, tipoDocumento, estatus } = req.body;
   const sql = `INSERT INTO constancias (cedula, apellidos, nombres, especialidad, tipoDocumento, estatus) VALUES (?, ?, ?, ?, ?, ?)`;
@@ -39,7 +45,9 @@ router.post('/api/constancias', (req, res) => {
   });
 });
 
-// PUT actualizar constancia
+// ========================
+// 🔹 PUT actualizar constancia
+// ========================
 router.put('/api/constancias/:id', (req, res) => {
   const { id } = req.params;
   const { cedula, apellidos, nombres, especialidad, tipoDocumento, estatus } = req.body;
@@ -54,7 +62,9 @@ router.put('/api/constancias/:id', (req, res) => {
   });
 });
 
-// DELETE constancia
+// ========================
+// 🔹 DELETE constancia
+// ========================
 router.delete('/api/constancias/:id', (req, res) => {
   const { id } = req.params;
   db.run('DELETE FROM constancias WHERE id = ?', [id], function(err) {
