@@ -1,10 +1,16 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const db_name = path.join(__dirname, 'constancias.db');
-const db = new sqlite3.Database(db_name, (err) => {
-  if (err) console.log('❌ Error al conectar a SQLite:', err);
-  else console.log('✅ Conectado a SQLite');
+// 📂 Ruta absoluta a la base de datos
+const db_path = path.join(__dirname, 'constancias.db');
+console.log('📂 DB path:', db_path);
+
+const db = new sqlite3.Database(db_path, (err) => {
+  if (err) {
+    console.error('❌ Error al conectar a la base de datos:', err.message);
+  } else {
+    console.log('✅ Conectado a la base de datos SQLite');
+  }
 });
 
 // Crear tablas si no existen
@@ -41,3 +47,4 @@ db.serialize(() => {
 });
 
 module.exports = db;
+
