@@ -1,7 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-// 📂 Ruta absoluta a la base de datos
 const db_path = path.join(__dirname, 'constancias.db');
 console.log('📂 DB path:', db_path);
 
@@ -40,11 +39,9 @@ db.serialize(() => {
     nombre TEXT
   )`);
 
-  // Datos iniciales
   db.run(`INSERT OR IGNORE INTO especialidad (id, nombre) VALUES (1, 'Informática')`);
   db.run(`INSERT OR IGNORE INTO tipo_documento (id, nombre) VALUES (1, 'Constancia de estudio')`);
   db.run(`INSERT OR IGNORE INTO estatus (id, nombre) VALUES (1, 'Pendiente')`);
 });
 
 module.exports = db;
-

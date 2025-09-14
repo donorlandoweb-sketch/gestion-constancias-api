@@ -3,11 +3,11 @@ const cors = require('cors');
 const app = express();
 
 // Middlewares
-app.use(cors()); // permite que cualquier origen haga peticiones
-app.use(express.json()); // parsea JSON en el body
+app.use(cors());
+app.use(express.json());
 
 // Rutas
-const constanciasRoutes = require('./constancias');
+const constanciasRoutes = require('./routes/constancias');
 app.use(constanciasRoutes);
 
 // Ruta de prueba
