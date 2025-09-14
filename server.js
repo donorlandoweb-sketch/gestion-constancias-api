@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const constanciasRoutes = require("./routes/constancias");
-const db = require("./db");
 
 const app = express();
 
@@ -12,7 +11,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// Rutas principales (OJO: aquí solo va la ruta base, no la URL completa)
+// Log de cada request para debug
+app.use((req, res, next) => {
+  console.log(`📥 Request recibido: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// Rutas
 app.use("/api/constancias", constanciasRoutes);
 
 // Ruta raíz de prueba
@@ -28,5 +33,5 @@ app.get("/ping", (req, res) => {
 // Puerto dinámico para Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
